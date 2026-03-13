@@ -11,10 +11,9 @@ type Movie = {
 
 interface MovieSearchCardProps {
     movie: Movie;
-    onAddToWatchlist: (movie: Movie) => void;
 }
 
-export default function MovieSearchCard({ movie, onAddToWatchlist }: MovieSearchCardProps) {
+export default function MovieSearchCard({ movie }: MovieSearchCardProps) {
     return (
         <div className="relative w-full h-110 bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-700 group">
             {movie.poster_path ? (
@@ -42,12 +41,6 @@ export default function MovieSearchCard({ movie, onAddToWatchlist }: MovieSearch
                     >
                         Details
                     </Link>
-                    <button
-                        onClick={() => onAddToWatchlist(movie)}
-                        className="flex-1 px-4 py-2 bg-yellow-500 bg-opacity-80 text-black rounded-lg hover:bg-opacity-100 transition-all duration-300 text-sm font-medium"
-                    >
-                        + Watchlist
-                    </button>
                 </div>
             </div>
         </div>

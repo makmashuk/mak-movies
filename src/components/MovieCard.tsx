@@ -7,8 +7,8 @@ import { getMovieImageUrl } from "@/lib/util";
 
 interface MovieCardProps {
   movie: Movie;
-  onAddToWatchlist?: (movie: Movie) => void;
   isInWatchlist?: boolean;
+  onAddToWatchlist?: (movie: Movie) => void;
   onRemoveFromWatchlist?: (movieId: number) => void;
 }
 

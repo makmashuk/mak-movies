@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import MovieCard from "@/components/MovieCard";
 import { Movie, fetchTrendingMovies } from "@/lib/tmdb";
+import { isMovieInWatchlist, removeFromWatchlist } from "@/lib/watchlist.util";
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -39,6 +40,11 @@ export default function Home() {
     }
   };
 
+  const handleRemoveFromWatchlist = (movieId: number) => {
+      removeFromWatchlist(movieId);
+      setNotification(`Movie removed from watchlist!`);
+    };
+
   if (loading) {
     return <div className="container mx-auto p-4">Loading...</div>;
   }
@@ -46,12 +52,14 @@ export default function Home() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-8 text-center">Trending Movies</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {movies.map((movie) => (
           <MovieCard
             key={movie.id}
             movie={movie}
+            isInWatchlist={isMovieInWatchlist(movie.id)}
             onAddToWatchlist={handleAddToWatchlist}
+            onRemoveFromWatchlist={handleRemoveFromWatchlist}
           />
         ))}
       </div>

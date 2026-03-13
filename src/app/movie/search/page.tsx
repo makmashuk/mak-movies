@@ -28,11 +28,6 @@ const MovieSearch: React.FC = () => {
         }
     };
 
-     const handleAddToWatchlist = (movie: Movie) => {
-        addToWatchlist(movie);
-        // setNotification(`${movie.title} added to watchlist!`);
-        // setTimeout(() => setNotification(null), 3000);
-    };
 
     return (
         <div className="max-w-6xl mx-auto p-4 bg-gray-900 min-h-screen text-white">
@@ -66,7 +61,6 @@ const MovieSearch: React.FC = () => {
                     <MovieSearchCard
                         key={movie.id}
                         movie={movie}
-                        onAddToWatchlist={handleAddToWatchlist}
                     />
                 ))}
             </div>
