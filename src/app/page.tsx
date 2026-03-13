@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import MovieCard from "../components/MovieCard";
-import { Movie, fetchTrendingMovies } from "../lib/tmdb";
+import MovieCard from "@/components/MovieCard";
+import { Movie, fetchTrendingMovies } from "@/lib/tmdb";
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);

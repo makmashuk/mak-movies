@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Movie, searchMovies } from "@/lib/tmdb";
-import MovieSearchCard from "../../../components/MovieSearchCard"; // Adjust path if needed
+import MovieSearchCard from "@/components/MovieSearchCard";
 import { addToWatchlist } from "@/lib/watchlist.util";
 
 

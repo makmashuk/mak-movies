@@ -1,6 +1,7 @@
 "use client";
+
 import Image from "next/image";
-import { fetchMovieDetails, Movie } from "../../../lib/tmdb";
+import { fetchMovieDetails, Movie } from "@/lib/tmdb";
 import { useState, useEffect } from "react";
 import { getMovieImageUrl } from "@/lib/util";
 import { addToWatchlist, isMovieInWatchlist, removeFromWatchlist } from "@/lib/watchlist.util";

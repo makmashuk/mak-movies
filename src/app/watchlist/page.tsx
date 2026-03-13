@@ -1,10 +1,11 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import MovieCard from "../../components/MovieCard";
-import { useAuth } from "../../context/AuthContext";
-import { Movie } from "../../lib/tmdb";
-import { getWatchlist, removeFromWatchlist } from "../../lib/watchlist.util";
+import MovieCard from "@/components/MovieCard";
+import { useAuth } from "@/context/AuthContext";
+import { Movie } from "@/lib/tmdb";
+import { getWatchlist, removeFromWatchlist } from "@/lib/watchlist.util";
 
 export default function WatchlistPage() {
   const [watchlist, setWatchlist] = useState<Movie[]>([]);
@@ -26,7 +27,7 @@ export default function WatchlistPage() {
 
   const handleRemoveFromWatchlist = (movieId: number) => {
     removeFromWatchlist(movieId);
-    setWatchlist(getWatchlist()); // Refresh state after removal
+    setWatchlist(getWatchlist());
   };
 
   return (
