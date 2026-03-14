@@ -52,7 +52,7 @@ export default function MovieCard({
         </div>}
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-bold text-white mb-2">{movie.title}</h3>
+        <h3 className="text-lg font-bold text-white mb-2 truncate">{movie.title}</h3>
         <div className="flex items-center mb-2">
           <span className="text-yellow-500 mr-2">★</span>
           <span className="text-white">{movie.vote_average.toFixed(1)}</span>
