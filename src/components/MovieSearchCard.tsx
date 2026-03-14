@@ -3,9 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Star, Calendar } from "lucide-react";
-import { Movie } from "@/lib/tmdb";
-import { getMovieImageUrl } from "@/lib/util";
+import { Star, Calendar, BookmarkCheck, Bookmark } from "lucide-react";
+import { getMovieImageUrl, getVoteColor } from "@/lib/movie.util";
+import Movie from "@/interface/movie";
+import { useAuth } from "@/context/AuthContext";
+import { useWatchlist } from "@/hooks/useWatchlist";
 
 interface MovieSearchCardProps {
   movie: Movie;
@@ -13,16 +15,12 @@ interface MovieSearchCardProps {
 
 export default function MovieSearchCard({ movie }: MovieSearchCardProps) {
 
-  const posterUrl = movie.poster_path
-    ? getMovieImageUrl(movie.poster_path, "w500")
-    : null;
-
-  const voteColor =
-    movie.vote_average >= 7
-      ? "text-green-400"
-      : movie.vote_average >= 5
-      ? "text-yellow-400"
-      : "text-red-400";
+  const { user } = useAuth();
+  const { addMovie, removeMovie, isInWatchlist } = useWatchlist();
+  
+  const posterUrl = getMovieImageUrl(movie.poster_path, "w500")
+  const voteColor =  getVoteColor(movie.vote_average)
+    
 
   return (
     <motion.div
@@ -50,6 +48,25 @@ export default function MovieSearchCard({ movie }: MovieSearchCardProps) {
           <Star size={11} fill="currentColor" />
           {movie.vote_average.toFixed(1)}
         </div>
+      )}
+
+       {user && (
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() =>
+            isInWatchlist(movie.id)
+              ? removeMovie(movie.id)
+              : addMovie(movie)
+          }
+          className={`absolute top-2 right-2 p-1.5 rounded-full backdrop-blur-sm transition-colors z-10 ${
+            isInWatchlist(movie.id)
+              ? "bg-yellow-500 text-black"
+              : "bg-black/50 text-white hover:bg-yellow-500 hover:text-black"
+          }`}
+        >
+          {isInWatchlist(movie.id) ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
+        </motion.button>
       )}
 
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

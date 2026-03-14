@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Star, Calendar, Bookmark, BookmarkCheck } from "lucide-react";
-import { GENRE_MAP, Movie } from "../lib/tmdb";
-import { getMovieImageUrl } from "@/lib/util";
+import { getGenreNames, getMovieImageUrl, getVoteColor } from "@/lib/movie.util";
 import { useAuth } from "@/context/AuthContext";
+import Movie from "@/interface/movie";
 
 interface MovieCardProps {
   movie: Movie;
@@ -22,19 +22,10 @@ export default function MovieCard({
   onRemoveFromWatchlist,
 }: MovieCardProps) {
   const { user } = useAuth();
-  const genreNames =
-    movie.genre_ids?.map((id) => GENRE_MAP[id]).filter(Boolean) ?? [];
-
-  const posterUrl = movie.poster_path
-    ? getMovieImageUrl(movie.poster_path, "w500")
-    : null;
-
-  const voteColor =
-    movie.vote_average >= 7
-      ? "text-green-400"
-      : movie.vote_average >= 5
-        ? "text-yellow-400"
-        : "text-red-400";
+  const genreNames = getGenreNames(undefined, movie.genre_ids);
+  const posterUrl = getMovieImageUrl(movie.poster_path, "w500")
+  const voteColor =  getVoteColor(movie.vote_average)
+  
 
   return (
     <motion.div

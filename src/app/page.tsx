@@ -2,12 +2,12 @@
 
 import BannerSlider from "@/components/Home/BannerSlider";
 import MoviesPanel from "@/components/Home/MoviesPanel";
+import Movie from "@/interface/movie";
 import {
   fetchPopularMovies,
   fetchTopRatedMovies,
   fetchTrendingMovies,
   fetchUpcomingMovies,
-  Movie,
 } from "@/lib/tmdb";
 import { useState, useEffect } from "react";
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Movie } from "@/lib/tmdb";
-import { getMovieImageUrl } from "@/lib/util";
+import { getMovieImageUrl } from "@/lib/movie.util";
 import Link from "next/link";
 
 interface BannerSliderProps {
@@ -34,7 +34,7 @@ export default function BannerSlider({
 
   return (
     <>
-      <div className="fixed top-20 left-0 w-full h-[75vh] lg:h-[90vh] overflow-hidden z-0">
+      <div className="fixed top-16 left-0 w-full h-[75vh] lg:h-[90vh] overflow-hidden z-0">
         <AnimatePresence mode="sync">
           <motion.div
             key={movie.id}
