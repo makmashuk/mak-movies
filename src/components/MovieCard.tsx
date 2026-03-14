@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Movie } from "../lib/tmdb";
+import { motion } from "framer-motion";
+import { Star, Calendar, Bookmark, BookmarkCheck } from "lucide-react";
+import { GENRE_MAP, Movie } from "../lib/tmdb";
 import { getMovieImageUrl } from "@/lib/util";
 import { useAuth } from "@/context/AuthContext";
 
@@ -19,57 +21,105 @@ export default function MovieCard({
   isInWatchlist = false,
   onRemoveFromWatchlist,
 }: MovieCardProps) {
+  const { user } = useAuth();
+  const genreNames =
+    movie.genre_ids?.map((id) => GENRE_MAP[id]).filter(Boolean) ?? [];
 
-    const posterUrl = getMovieImageUrl(movie.poster_path, 'w500');
-     const { user } = useAuth();
+  const posterUrl = movie.poster_path
+    ? getMovieImageUrl(movie.poster_path, "w500")
+    : null;
+
+  const voteColor =
+    movie.vote_average >= 7
+      ? "text-green-400"
+      : movie.vote_average >= 5
+        ? "text-yellow-400"
+        : "text-red-400";
 
   return (
-    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-      <div className="relative">
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
+      className="relative w-full aspect-[2/3] bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-white/5 hover:border-yellow-500/30 transition-colors group"
+    >
+      {posterUrl ? (
         <Image
           src={posterUrl}
           alt={movie.title}
-          width={300}
-          height={450}
-          className="w-full h-64 object-cover"
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {user && <div className="absolute top-2 right-2 flex space-x-2">
-          {isInWatchlist ? (
-            <button
-              onClick={() => onRemoveFromWatchlist?.(movie.id)}
-              className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
-            >
-              - Remove from Watchlist
-            </button>
-          ) : (
-            <button
-              onClick={() => onAddToWatchlist?.(movie)}
-              className="bg-yellow-500 text-black p-2 rounded-full hover:bg-yellow-600"
-            >
-              + Add to Watchlist
-            </button>
-          )}
-        </div>}
-      </div>
-      <div className="p-4">
-        <h3 className="text-lg font-bold text-white mb-2 truncate">{movie.title}</h3>
-        <div className="flex items-center mb-2">
-          <span className="text-yellow-500 mr-2">★</span>
-          <span className="text-white">{movie.vote_average.toFixed(1)}</span>
+      ) : (
+        <div className="w-full h-full bg-gray-700 flex flex-col items-center justify-center text-gray-500 gap-2">
+          <Star size={32} className="opacity-30" />
+          <span className="text-sm">No Image</span>
         </div>
-        <p className="text-gray-400 text-sm mb-2">
-          {movie.release_date
-            ? new Date(movie.release_date).getFullYear()
-            : "N/A"}{" "}
-          • {movie.genres?.map((g) => g.name).join(", ") || "Genres"}
-        </p>
+      )}
+
+      {movie.vote_average > 0 && (
+        <div
+          className={`absolute top-2 left-2 flex items-center gap-1 bg-black/70 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-bold ${voteColor}`}
+        >
+          <Star size={11} fill="currentColor" />
+          {movie.vote_average.toFixed(1)}
+        </div>
+      )}
+
+      {user && (
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() =>
+            isInWatchlist
+              ? onRemoveFromWatchlist?.(movie.id)
+              : onAddToWatchlist?.(movie)
+          }
+          className={`absolute top-2 right-2 p-1.5 rounded-full backdrop-blur-sm transition-colors z-10 ${
+            isInWatchlist
+              ? "bg-yellow-500 text-black"
+              : "bg-black/50 text-white hover:bg-yellow-500 hover:text-black"
+          }`}
+        >
+          {isInWatchlist ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
+        </motion.button>
+      )}
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+        <h3 className="text-white font-semibold text-sm line-clamp-1 mb-1">
+          {movie.title}
+        </h3>
+
+        {genreNames.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-2">
+            {genreNames.slice(0, 2).map((name) => (
+              <span
+                key={name}
+                className="text-xs bg-white/10 text-gray-300 px-2 py-0.5 rounded-full"
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div className="flex items-center gap-3 text-xs text-gray-400 mb-2">
+          {movie.release_date && (
+            <div className="flex items-center gap-1">
+              <Calendar size={11} />
+              {new Date(movie.release_date).getFullYear()}
+            </div>
+          )}
+        </div>
+
         <Link
           href={`/movie/${movie.id}`}
-          className="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 block text-center"
+          className="block text-center py-2 bg-yellow-500 hover:bg-yellow-600 text-black text-xs font-bold rounded-lg transition-colors"
         >
           Watch Now
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 }
