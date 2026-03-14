@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Movie } from "../lib/tmdb";
 import { getMovieImageUrl } from "@/lib/util";
+import { useAuth } from "@/context/AuthContext";
 
 interface MovieCardProps {
   movie: Movie;
@@ -20,6 +21,7 @@ export default function MovieCard({
 }: MovieCardProps) {
 
     const posterUrl = getMovieImageUrl(movie.poster_path, 'w500');
+     const { user } = useAuth();
 
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
@@ -31,7 +33,7 @@ export default function MovieCard({
           height={450}
           className="w-full h-64 object-cover"
         />
-        <div className="absolute top-2 right-2 flex space-x-2">
+        {user && <div className="absolute top-2 right-2 flex space-x-2">
           {isInWatchlist ? (
             <button
               onClick={() => onRemoveFromWatchlist?.(movie.id)}
@@ -47,7 +49,7 @@ export default function MovieCard({
               + Add to Watchlist
             </button>
           )}
-        </div>
+        </div>}
       </div>
       <div className="p-4">
         <h3 className="text-lg font-bold text-white mb-2">{movie.title}</h3>

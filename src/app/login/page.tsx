@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -19,6 +20,7 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/');
+      toast.success('Successfully logged in!', { duration: 1000 });
     } catch (err: any) {
       setError(err.message);
     } finally {

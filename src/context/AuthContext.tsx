@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
+import { toast } from 'react-hot-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -27,6 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const logout = async () => {
+    toast.success('Successfully logged out!', { duration: 1000 });
     await signOut(auth);
   };
 

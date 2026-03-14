@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import MovieCard from "@/components/MovieCard";
 import { Movie, fetchTrendingMovies } from "@/lib/tmdb";
-import { isMovieInWatchlist, removeFromWatchlist } from "@/lib/watchlist.util";
+import { useWatchlist } from "@/hooks/useWatchlist";
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  const [notification, setNotification] = useState<string | null>(null);
+  const { addMovie, removeMovie, isInWatchlist } = useWatchlist();
 
   useEffect(() => {
     const loadMovies = async () => {
@@ -24,27 +24,7 @@ export default function Home() {
     loadMovies();
   }, []);
 
-  const handleAddToWatchlist = (movie: Movie) => {
-    const watchlist = JSON.parse(localStorage.getItem("watchlist") || "[]");
-    const isAlreadyInWatchlist = watchlist.some(
-      (m: Movie) => m.id === movie.id,
-    );
-    if (!isAlreadyInWatchlist) {
-      watchlist.push(movie);
-      localStorage.setItem("watchlist", JSON.stringify(watchlist));
-      setNotification(`${movie.title} added to watchlist!`);
-      setTimeout(() => setNotification(null), 3000); // Hide after 3 seconds
-    } else {
-      setNotification(`${movie.title} is already in your watchlist.`);
-      setTimeout(() => setNotification(null), 3000);
-    }
-  };
-
-  const handleRemoveFromWatchlist = (movieId: number) => {
-      removeFromWatchlist(movieId);
-      setNotification(`Movie removed from watchlist!`);
-    };
-
+  
   if (loading) {
     return <div className="container mx-auto p-4">Loading...</div>;
   }
@@ -57,17 +37,12 @@ export default function Home() {
           <MovieCard
             key={movie.id}
             movie={movie}
-            isInWatchlist={isMovieInWatchlist(movie.id)}
-            onAddToWatchlist={handleAddToWatchlist}
-            onRemoveFromWatchlist={handleRemoveFromWatchlist}
+            isInWatchlist={isInWatchlist(movie.id)}
+            onAddToWatchlist={addMovie}
+            onRemoveFromWatchlist={removeMovie}
           />
         ))}
       </div>
-      {notification && (
-        <div className="bg-green-500 text-white p-2 rounded mb-4 text-center">
-          {notification}
-        </div>
-      )}
     </div>
   );
 }
