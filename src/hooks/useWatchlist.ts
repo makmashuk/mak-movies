@@ -12,24 +12,30 @@ export function useWatchlist() {
     getWatchlist().map((m: Movie) => m.id),
   );
 
+  const [watchlistMovies, setWatchlistMovies] = useState<Movie[]>(() =>
+    getWatchlist(),
+  );
+
   const refreshWatchlist = () => {
-    setWatchlistIds(getWatchlist().map((m: Movie) => m.id));
+    const stored = getWatchlist();
+    setWatchlistIds(stored.map((m: Movie) => m.id));
+    setWatchlistMovies(stored);
   };
 
   const addMovie = (movie: Movie) => {
     if (watchlistIds.includes(movie.id)) return;
     addToWatchlist(movie);
     refreshWatchlist();
-    toast.success("Movie added to watchlist!", { duration: 1000 });
+    toast.success("Movie added to watchlist!");
   };
 
   const removeMovie = (movieId: number) => {
     removeFromWatchlist(movieId);
     refreshWatchlist();
-    toast.error("Movie removed from watchlist!", { duration: 1000 });
+    toast.error("Movie removed from watchlist!");
   };
 
   const isInWatchlist = (movieId: number) => watchlistIds.includes(movieId);
 
-  return { watchlistIds, addMovie, removeMovie, isInWatchlist };
+  return { watchlistMovies, watchlistIds, addMovie, removeMovie, isInWatchlist };
 }
