@@ -152,4 +152,4 @@ interface/
 
 ## 👤 Author
 
-Made with ♥ by **makmashuk**
+**makmashuk**
