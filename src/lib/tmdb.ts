@@ -3,6 +3,7 @@ const API_KEY = '0f1b275b4494e12ae7cad6885ea15753';
 // const API_KEY = process.env.EXT_PUBLIC_TMDB_API_KEY;
 
 export interface Movie {
+  original_language: boolean;
   id: number;
   title: string;
   poster_path: string;
