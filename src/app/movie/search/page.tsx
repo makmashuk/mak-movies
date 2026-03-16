@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, Loader2, Film } from "lucide-react";
-import { Movie, searchMovies } from "@/lib/tmdb";
+import {searchMovies } from "@/lib/tmdb";
 import MovieSearchCard from "@/components/MovieSearchCard";
+import Movie from "@/interface/movie";
 
 const MovieSearch: React.FC = () => {
   const [query, setQuery] = useState("");

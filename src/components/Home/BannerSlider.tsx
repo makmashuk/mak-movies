@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Movie } from "@/lib/tmdb";
+import Movie from "@/interface/movie";
 import { getMovieImageUrl } from "@/lib/movie.util";
 import Link from "next/link";
 

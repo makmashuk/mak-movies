@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import MovieCard from "@/components/MovieCard";
-import { Movie } from "@/lib/tmdb";
 import { useWatchlist } from "@/hooks/useWatchlist";
+import Movie from "@/interface/movie";
 
 export default function MoviesPanel({ title, fetchMovies }: { title: string; fetchMovies: () => Promise<Movie[]> }) {
   const [movies, setMovies] = useState<Movie[]>([]);
