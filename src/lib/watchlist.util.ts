@@ -1,25 +1,31 @@
-import { Movie } from "./tmdb";
+import Movie from "@/interface/movie";
 
-const WATCHLIST_KEY = "watchlist";
+const getKey = (userId: string) => `watchlist_${userId}`;
 
-export const getWatchlist = (): Movie[] => {
-    if (typeof window === "undefined") return [];
-    return JSON.parse(localStorage.getItem(WATCHLIST_KEY) || "[]");
+export const getWatchlist = (userId: string): Movie[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const data = localStorage.getItem(getKey(userId));
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
 };
 
-export const addToWatchlist = (movie: Movie): void => {
-    const list = getWatchlist();
-    if (!list.some((m) => m.id === movie.id)) {
-        list.push(movie);
-        localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
-    }
+export const addToWatchlist = (userId: string, movie: Movie): void => {
+  const current = getWatchlist(userId);
+  if (current.some((m) => m.id === movie.id)) return;
+  localStorage.setItem(getKey(userId), JSON.stringify([...current, movie]));
 };
 
-export const removeFromWatchlist = (movieId: number): void => {
-    const list = getWatchlist().filter((m) => m.id !== movieId);
-    localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
+export const removeFromWatchlist = (userId: string, movieId: number): void => {
+  const current = getWatchlist(userId);
+  localStorage.setItem(
+    getKey(userId),
+    JSON.stringify(current.filter((m) => m.id !== movieId)),
+  );
 };
 
-export const isMovieInWatchlist = (movieId: number): boolean => {
-    return getWatchlist().some((m) => m.id === movieId);
+export const isMovieInWatchlist = (userId: string, movieId: number): boolean => {
+  return getWatchlist(userId).some((m) => m.id === movieId);
 };

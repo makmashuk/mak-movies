@@ -23,9 +23,8 @@ export default function MovieCard({
 }: MovieCardProps) {
   const { user } = useAuth();
   const genreNames = getGenreNames(undefined, movie.genre_ids);
-  const posterUrl = getMovieImageUrl(movie.poster_path, "w500")
-  const voteColor =  getVoteColor(movie.vote_average)
-  
+  const posterUrl = getMovieImageUrl(movie.poster_path, "w500");
+  const voteColor = getVoteColor(movie.vote_average);
 
   return (
     <motion.div
@@ -75,15 +74,22 @@ export default function MovieCard({
         </motion.button>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent
+        opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
+      />
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-        <h3 className="text-white font-semibold text-sm line-clamp-1 mb-1">
+      <div className="absolute bottom-0 left-0 right-0 p-3
+        translate-y-0 opacity-100
+        md:translate-y-2 md:opacity-0
+        md:group-hover:translate-y-0 md:group-hover:opacity-100
+        transition-all duration-300"
+      >
+        <h3 className="text-white font-semibold text-sm line-clamp-2 mb-1">
           {movie.title}
         </h3>
 
         {genreNames.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-2">
+          <div className="flex flex-wrap gap-1 mb-1.5">
             {genreNames.slice(0, 2).map((name) => (
               <span
                 key={name}
@@ -95,18 +101,16 @@ export default function MovieCard({
           </div>
         )}
 
-        <div className="flex items-center gap-3 text-xs text-gray-400 mb-2">
-          {movie.release_date && (
-            <div className="flex items-center gap-1">
-              <Calendar size={11} />
-              {new Date(movie.release_date).getFullYear()}
-            </div>
-          )}
-        </div>
+        {movie.release_date && (
+          <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
+            <Calendar size={11} />
+            {new Date(movie.release_date).getFullYear()}
+          </div>
+        )}
 
         <Link
           href={`/movie/${movie.id}`}
-          className="block text-center py-2 bg-yellow-500 hover:bg-yellow-600 text-black text-xs font-bold rounded-lg transition-colors"
+          className="block text-center py-1.5 bg-yellow-500 hover:bg-yellow-600 text-black text-xs font-bold rounded-lg transition-colors"
         >
           Watch Now
         </Link>

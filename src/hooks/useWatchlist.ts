@@ -1,36 +1,40 @@
 import { useState } from "react";
-import { Movie } from "@/lib/tmdb";
 import {
   addToWatchlist,
   getWatchlist,
   removeFromWatchlist,
 } from "@/lib/watchlist.util";
 import { toast } from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
+import Movie from "@/interface/movie";
 
 export function useWatchlist() {
+  const { user } = useAuth();
+  const userId = user?.uid ?? "guest";
+
   const [watchlistIds, setWatchlistIds] = useState<number[]>(() =>
-    getWatchlist().map((m: Movie) => m.id),
+    getWatchlist(userId).map((m: Movie) => m.id),
   );
 
   const [watchlistMovies, setWatchlistMovies] = useState<Movie[]>(() =>
-    getWatchlist(),
+    getWatchlist(userId),
   );
 
   const refreshWatchlist = () => {
-    const stored = getWatchlist();
+    const stored = getWatchlist(userId);
     setWatchlistIds(stored.map((m: Movie) => m.id));
     setWatchlistMovies(stored);
   };
 
   const addMovie = (movie: Movie) => {
     if (watchlistIds.includes(movie.id)) return;
-    addToWatchlist(movie);
+    addToWatchlist(userId, movie);
     refreshWatchlist();
     toast.success("Movie added to watchlist!");
   };
 
   const removeMovie = (movieId: number) => {
-    removeFromWatchlist(movieId);
+    removeFromWatchlist(userId, movieId);
     refreshWatchlist();
     toast.error("Movie removed from watchlist!");
   };
